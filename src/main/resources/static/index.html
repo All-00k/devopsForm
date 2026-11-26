@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Feedback Application</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-card h2 {
+            color: #333333;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .form-card p.subtitle {
+            color: #666666;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #444444;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .rating-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .rating-option input[type="radio"] {
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #5a67d8;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #e6fffa;
+            border: 1px solid #38b2ac;
+            color: #234e52;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-card">
+        <h2>Feedback Form</h2>
+        <p class="subtitle">We value your thoughts! Please fill out the form below.</p>
+
+        <form id="feedbackForm" action="/submit" method="POST">
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="example@domain.com" required>
+            </div>
+
+            <!-- Feedback Category Field -->
+            <div class="form-group">
+                <label for="category">Feedback Category *</label>
+                <select id="category" name="category" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="Product Quality">Product Quality</option>
+                    <option value="Customer Support">Customer Support</option>
+                    <option value="Bug Report">Bug Report</option>
+                    <option value="Feature Request">Feature Request</option>
+                    <option value="General Suggestion">General Suggestion</option>
+                </select>
+            </div>
+
+            <!-- Rating Field -->
+            <div class="form-group">
+                <label>Rating *</label>
+                <div class="rating-group">
+                    <label class="rating-option">
+                        <input type="radio" name="rating" value="1" required> 1
+                    </label>
+                    <label class="rating-option">
+                        <input type="radio" name="rating" value="2"> 2
+                    </label>
+                    <label class="rating-option">
+                        <input type="radio" name="rating" value="3"> 3
+                    </label>
+                    <label class="rating-option">
+                        <input type="radio" name="rating" value="4"> 4
+                    </label>
+                    <label class="rating-option">
+                        <input type="radio" name="rating" value="5"> 5
+                    </label>
+                </div>
+            </div>
+
+            <!-- Comments Field -->
+            <div class="form-group">
+                <label for="comments">Comments *</label>
+                <textarea id="comments" name="comments" rows="4" placeholder="Write your comments here..." required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Feedback</button>
+
+            <div class="success-message" id="successMessage">
+                Thank you! Your feedback has been submitted successfully.
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            // For client-side preview/demo purposes
+            if (window.location.protocol === 'file:') {
+                event.preventDefault();
+                document.getElementById('successMessage').style.display = 'block';
+                this.reset();
+            }
+        });
+    </script>
+</body>
+</html>
