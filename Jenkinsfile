@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Ensure Maven is in PATH on Windows Jenkins agent if not already in system PATH
+        PATH = "C:\\Users\\aloks\\Downloads\\apache-maven-3.10.0-bin\\bin;${env.PATH}"
+    }
+
     stages {
         stage('Checkout') {
             steps {
